@@ -11,6 +11,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
-          registry-url: 'https://trialk033s3.jfrog.io'
+          registry-url: 'https://trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/'
       - run: npm set https://trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/:_authToken=${{ secrets.JFROG_DOCKER_TOKEN }}
       - run: npm publish
