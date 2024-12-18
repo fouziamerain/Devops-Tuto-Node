@@ -12,6 +12,6 @@ jobs:
         run:  |
           echo "registry=https://trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/"> .npmrc
           AUTH_INFO=$(echo -n "fouzia:${{ secrets.JFROG_DOCKER_TOKEN }} " | base64)
-          echo "//$ARTIFACTORY_URL:_auth=$AUTH_INFO" >> .npmrc
+          echo "//https://trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/:_auth=$AUTH_INFO" >> .npmrc
      
       - run: npm publish
