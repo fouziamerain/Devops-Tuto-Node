@@ -8,5 +8,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm set registry=registry=https://trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/:_authToken=${{ secrets.JFROG_DOCKER_TOKEN }}
+      - run: npm set https://trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/:_authToken=${{ secrets.JFROG_DOCKER_TOKEN }}
       - run: npm publish
