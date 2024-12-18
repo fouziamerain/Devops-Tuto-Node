@@ -8,5 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm config set _auth ${{ secrets.JFROG_DOCKER_TOKEN }} && npm config set registry https://trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/ && npm config set always-auth=true && npm config set email=fouzia.merain@gmail.com
+      - run: npm config set registry https://trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/
+      - run: npm config set _auth ${{ secrets.JFROG_DOCKER_TOKEN }} 
+      
+      - run: npm config set always-auth=true 
+      - run: npm config set email=fouzia.merain@gmail.com
       - run: npm publish
