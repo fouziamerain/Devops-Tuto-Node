@@ -13,7 +13,6 @@ jobs:
           echo "email = fouzia.merain@gmail.com"> .npmrc
           echo "always-auth = true" >> .npmrc
           echo "registry=https://trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/" >> .npmrc
-          AUTH_INFO=$(echo -n "${{ secrets.JFROG_DOCKER_TOKEN }}" | base64)
-          echo "//https://trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/:authToken=$AUTH_INFO" >> .npmrc
+          echo "//https://trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/:authToken=${{ secrets.JFROG_DOCKER_TOKEN }}" >> .npmrc
      
       - run: npm publish
