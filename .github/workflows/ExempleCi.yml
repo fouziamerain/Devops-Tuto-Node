@@ -8,11 +8,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Set up nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Configure .npmrc for Artifactory
         run:  |
-          echo "email = fouzia.merain@gmail.com"> .npmrc
-          echo "always-auth = true" >> .npmrc
-          echo "registry=https://trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/" >> .npmrc
-          echo "//https://trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/:authToken=${{ secrets.JFROG_DOCKER_TOKEN }}" >> .npmrc
-     
+            echo "email = fouzia.merain@gmail.com
+                always-auth = true
+                registry=https://trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/
+                //trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/:_authToken=${{ secrets.JFROG_DOCKER_TOKEN }}" > ~/.npmrc
+
       - run: npm publish
