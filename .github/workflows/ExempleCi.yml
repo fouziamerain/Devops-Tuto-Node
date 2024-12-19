@@ -1,13 +1,17 @@
-name: Exemple
+name: Build and push nodejs app to artifactory
+
 on:
   push:
     branches:
-      - 'main'
+      - main
+
 jobs:
-   container:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set up nodejs
         uses: actions/setup-node@v3
         with:
@@ -16,11 +20,19 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Configure .npmrc for Artifactory
-        run:  |
-            echo "email = fouzia.merain@gmail.com
+      - name: Configure artifactory
+        env:
+          ARTIFACTORY_USER_EMAIL: ${{ secrets.ARTIFACTORY_USER_EMAIL }}
+          ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+          ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+        run:
+          |
+          echo "email = $ARTIFACTORY_USER_EMAIL
                 always-auth = true
-                registry=https://trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/
-                //trialk033s3.jfrog.io/artifactory/api/npm/paris-npm/:_authToken=${{ secrets.JFROG_DOCKER_TOKEN }}" > ~/.npmrc
+                registry=https://$ARTIFACTORY_URL/artifactory/api/npm/paris-npm/
+                //$ARTIFACTORY_URL/artifactory/api/npm/paris-npm/:_authToken=$ARTIFACTORY_PASSWORD" > ~/.npmrc
 
-      - run: npm publish
+      - name: Push to artifactory
+        env:
+          ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+        run: npm publish --registry https://$ARTIFACTORY_URL/artifactory/api/npm/paris-npm/
