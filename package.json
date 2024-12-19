@@ -1,13 +1,14 @@
 {
   "name": "devops-tuto-node",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "Devops Tuto node",
   "main": "server.js",
   "author": {
     "name": ""
   },
   "devDependencies": {
-    "eslint": "^8.21.0"
+    "eslint": "^8.21.0",
+    "@angular/cli": "^16.2.12"
   },
   "eslintConfig": {
   }
