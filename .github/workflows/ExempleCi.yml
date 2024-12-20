@@ -1,8 +1,11 @@
 name: Build and push nodejs app to artifactory
 
 on:
-  schedule:
-  - cron:  '0/5 * * * *'
+  #schedule:
+  #- cron:  '0/5 * * * *'
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -44,19 +47,41 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: Configure artifactory
+      - name: Configure Jfrog CLI
+        uses: jfrog/setup-jfrog-cli@v4
         env:
-          ARTIFACTORY_USER_EMAIL: ${{ secrets.ARTIFACTORY_USER_EMAIL }}
-          ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
-          ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-        run:
+          # JFrog Platform url
+          JF_URL: https://${{ secrets.ARTIFACTORY_URL }} 
+      
+          # Basic authentication credentials
+          JF_USER: ${{ secrets.ARTIFACTORY_USER }}
+          JF_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+         
+      - run:
           |
-          echo "email = $ARTIFACTORY_USER_EMAIL
-                always-auth = true
-                registry=https://$ARTIFACTORY_URL/artifactory/api/npm/paris-npm/
-                //$ARTIFACTORY_URL/artifactory/api/npm/paris-npm/:_authToken=$ARTIFACTORY_PASSWORD" > ~/.npmrc
+          # Ping the server
+          jf rt ping
+          # Collect environment variables for the build
+          jf rt bce
+          # Collect VCS details from git and add them to the build
+          jf rt bag
+          # Publish build info
+          jf rt bp
 
-      - name: Push to artifactory
-        env:
-          ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-        run: npm publish --registry https://$ARTIFACTORY_URL/artifactory/api/npm/paris-npm/
+          
+      #- name: Configure artifactory
+        #env:
+          #ARTIFACTORY_USER_EMAIL: ${{ secrets.ARTIFACTORY_USER_EMAIL }}
+          #ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+          #ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+        #run:
+          #|
+          #echo "email = $ARTIFACTORY_USER_EMAIL
+                #always-auth = true
+                #registry=https://$ARTIFACTORY_URL/artifactory/api/npm/paris-npm/
+                #//$ARTIFACTORY_URL/artifactory/api/npm/paris-npm/:_authToken=$ARTIFACTORY_PASSWORD" > ~/.npmrc
+
+      #- name: Push to artifactory
+        #env:
+          #ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+        #run: npm publish --registry https://$ARTIFACTORY_URL/artifactory/api/npm/paris-npm/
