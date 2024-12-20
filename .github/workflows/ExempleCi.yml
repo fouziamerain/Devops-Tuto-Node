@@ -72,6 +72,7 @@ jobs:
           jf rt bag
           # Publish build info
           jf rt bp
+          ./jfrog rt u repors/path/to/artifactory-repository/
 
           
       #- name: Configure artifactory
