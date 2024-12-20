@@ -47,6 +47,11 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+      - name: save sonar raport
+        run:
+          |
+          mkdir -p reports
+          cp -r .scannerwork/* reports/
       - name: Configure Jfrog CLI
         uses: jfrog/setup-jfrog-cli@v4
         env:
